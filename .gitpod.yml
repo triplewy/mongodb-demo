@@ -1,6 +1,9 @@
+image:
+  file: Dockerfile
 ports:
   - port: 8080
     onOpen: open-preview
+  - port: 27017
 tasks:
   - init: python3 -m pip install -r requirements.txt
-#     command: yarn dev
+    command: mongod
