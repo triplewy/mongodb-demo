@@ -19,4 +19,4 @@ if __name__ == "__main__":
     arr = loadCSV()
     numInserted = insertIntoMongo(arr)
 
-    assert numInserted == len(arr)
+    print("{} rows inserted".format(numInserted))
