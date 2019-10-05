@@ -3,4 +3,5 @@ ports:
   - port: 5000
   - port: 27017
 tasks:
-  - init: python3 -m pip install -r requirements.txt
+  - init: pip3 install -r requirements.txt
+  - command: mongod
