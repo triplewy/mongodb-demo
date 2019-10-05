@@ -4,5 +4,5 @@ ports:
   - port: 27017
 tasks:
   - init: pip3 install -r requirements.txt
-  - command: mongod Terminal1
-  - command: python3 etl.py Terminal2
+  - command: mongod
+  - command: python3 etl.py

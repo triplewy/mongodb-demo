@@ -2,11 +2,6 @@ import csv
 from time import sleep
 from pymongo import MongoClient
 
-import sys
-import argparse
-
-db = MongoClient().test
-
 def loadCSV():
     result = []
     with open('AB_NYC_2019.csv', newline='') as csvfile:
@@ -21,6 +16,8 @@ def insertIntoMongo(arr):
 
 if __name__ == "__main__":
     sleep(5)
+
+    db = MongoClient().test
     arr = loadCSV()
     numInserted = insertIntoMongo(arr)
 
