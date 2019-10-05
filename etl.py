@@ -2,21 +2,30 @@ import csv
 from time import sleep
 from pymongo import MongoClient
 
-def loadCSV():
-    result = []
+def loadAirbnb():
+    arr = []
     with open('AB_NYC_2019.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            result.append(row)
-    return result
+            arr.append(row)
 
-def insertIntoMongo(arr):
-    db.airbnb.insert_many([row for row in arr]).inserted_ids
-    return db.airbnb.count_documents({})
+    inserted_ids = db.airbnb.insert_many(arr).inserted_ids
+    return len(inserted_ids)
+
+def loadTaxi():
+    arr = []
+    with open('TAXI_NYC_2019.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            arr.append(row)
+
+    inserted_ids = db.taxi.insert_many(arr).inserted_ids
+    return len(inserted_ids)
 
 if __name__ == "__main__":
     db = MongoClient().test
-    arr = loadCSV()
-    numInserted = insertIntoMongo(arr)
+    numAB = loadAirbnb()
+    numTaxi = loadTaxi()
 
-    print("{} rows inserted".format(numInserted))
+    print("{} Airbnb docs inserted".format(numAB))
+    print("{} taxi docs inserted".format(numTaxi))
