@@ -15,8 +15,6 @@ def insertIntoMongo(arr):
     return db.airbnb.count_documents({})
 
 if __name__ == "__main__":
-    sleep(5)
-
     db = MongoClient().test
     arr = loadCSV()
     numInserted = insertIntoMongo(arr)
