@@ -1,4 +1,3 @@
-import csv
 from pymongo import MongoClient
 
 db = MongoClient().test
@@ -16,19 +15,15 @@ db = MongoClient().test
 
 
 def query1():
-    result = db.airbnb.find_one()
+    result = db.airbnb.find_one({}, {'_id': 0})
+    return result
 
 
 def query2():
     docs = db.airbnb.find({'neighbourhood': 'Upper West Side'}, {
                           '_id': 0, 'latitude': 1, 'longitude': 1, 'price': 1})
-
-    with open('query2.csv', 'w', newline='') as csvfile:
-        fieldnames = ['latitude', 'longitude', 'price']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for doc in docs:
-            writer.writerow(doc)
+    result = [doc for doc in docs]
+    return result
 
 
 def query3():
@@ -41,7 +36,3 @@ def query4():
 
 def query5():
     pass
-
-
-if __name__ == "__main__":
-    query2()

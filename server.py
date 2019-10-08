@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import query
 
 app = Flask(__name__)
 CORS(app)
@@ -7,27 +8,32 @@ CORS(app)
 
 @app.route("/query1")
 def query1():
-    return "healthy"
+    result = query.query1()
+    return jsonify(result)
 
 
 @app.route("/query2")
 def query2():
-    return jsonify(data={})
+    result = query.query2()
+    return jsonify(result)
 
 
 @app.route("/query3")
 def query3():
-    return jsonify(data={})
+    result = query.query3()
+    return jsonify(result)
 
 
 @app.route("/query4")
 def query4():
-    return jsonify(data={})
+    result = query.query3()
+    return jsonify(result)
 
 
 @app.route("/query5", methods=["POST"])
 def query5():
-    return jsonify(data={})
+    result = query.query3()
+    return jsonify(result)
 
 
 if __name__ == "__main__":
