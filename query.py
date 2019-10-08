@@ -27,7 +27,7 @@ def query2(textSearch, minReviews):
 
 
 def query3():
-    docs = db.airbnb.aggregate([{'$group': {'_id': '$neighbourhood', 'avgPrice': {'$avg': '$price'}}}, {'$sort': {'avgPrice': -1}}])
+    docs = db.airbnb.aggregate([{'$group': {'_id': '$neighbourhood_group', 'avgPrice': {'$avg': '$price'}}}, {'$sort': {'avgPrice': -1}}])
     result = [doc for doc in docs]
     return result
 
