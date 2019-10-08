@@ -8,13 +8,19 @@ CORS(app)
 
 @app.route("/query1")
 def query1():
-    result = query.query1()
+    minFare = int(request.args.get('minFare'))
+    maxFare = int(request.args.get('maxFare'))
+
+    result = query.query1(minFare, maxFare)
     return jsonify(result)
 
 
 @app.route("/query2")
 def query2():
-    result = query.query2()
+    search = request.args.get('search')
+    minReviews = int(request.args.get('minReviews'))
+
+    result = query.query2(search, minReviews)
     return jsonify(result)
 
 

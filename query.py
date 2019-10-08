@@ -14,27 +14,28 @@ db = MongoClient().test
 '''
 
 
-def query1():
-    docs = db.airbnb.distinct('neighbourhood')
+def query1(minFare, maxFare):
+    docs = db.taxi.find({'fare_amount': {'$gte': minFare, '$lte': maxFare}}, {'_id': 0, 'pickup_longitude': 1, 'pickup_latitude': 1, 'fare_amount': 1})
     result = [doc for doc in docs]
     return result
 
 
-def query2():
-    docs = db.airbnb.find({'neighbourhood': 'Upper West Side'}, {
-                          '_id': 0, 'latitude': 1, 'longitude': 1, 'price': 1})
+def query2(textSearch, minReviews):
+    docs = db.airbnb.find({'$text': {'$search': textSearch}, 'number_of_reviews': {'$gte': minReviews}}, {'_id': 0, 'name': 1, 'number_of_reviews': 1, 'neighbourhood': 1, 'price': 1})
     result = [doc for doc in docs]
     return result
 
 
 def query3():
-    docs = db.airbnb.aggregate([{'$group': {'neighbourhood': '$neighbourhood', 'avgPrice': {'$avg': '$price'}}}, {'$sort': {'avgPrice': 1}}])
+    docs = db.airbnb.aggregate([{'$group': {'_id': '$neighbourhood', 'avgPrice': {'$avg': '$price'}}}, {'$sort': {'avgPrice': -1}}])
     result = [doc for doc in docs]
     return result
 
 
 def query4():
-    pass
+    docs = db.airbnb.find({'$text': {'$search': "java coffee shop"}})
+    result = [doc for doc in docs]
+    return result
 
 
 def query5():
