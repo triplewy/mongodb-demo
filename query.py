@@ -15,7 +15,8 @@ db = MongoClient().test
 
 
 def query1():
-    result = db.airbnb.find_one({}, {'_id': 0})
+    docs = db.airbnb.distinct('neighbourhood')
+    result = [doc for doc in docs]
     return result
 
 
@@ -27,7 +28,9 @@ def query2():
 
 
 def query3():
-    pass
+    docs = db.airbnb.aggregate([{'$group': {'neighbourhood': '$neighbourhood', 'avgPrice': {'$avg': '$price'}}}, {'$sort': {'avgPrice': 1}}])
+    result = [doc for doc in docs]
+    return result
 
 
 def query4():

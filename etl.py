@@ -8,6 +8,7 @@ def loadAirbnb():
     with open('AB_NYC_2019.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+            row['price'] = int(row['price'])
             arr.append(row)
 
     inserted_ids = db.airbnb.insert_many(arr).inserted_ids
