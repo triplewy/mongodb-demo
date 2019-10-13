@@ -33,7 +33,24 @@ def query3():
 
 
 def query4():
-    docs = db.airbnb.find({'$text': {'$search': "java coffee shop"}})
+    docs = db.taxi.aggregate([
+        {
+            '$group': {
+                '_id': {'$hour': "$pickup_datetime"},
+                'avgFare': {'$avg': '$fare_amount'},
+                'avgDistance': {
+                    '$avg': {'$add': [
+                        {'$abs': {'$subtract': ['$pickup_latitude', '$dropoff_latitude']}},
+                        {'$abs': {'$subtract': ['$pickup_longitude', '$dropoff_longitude']}}
+                    ]}
+                },
+                'count': {'$sum': 1}
+            }
+        },
+        {
+            '$sort': {'avgFare': -1}
+        }
+    ])
     result = [doc for doc in docs]
     return result
 
