@@ -36,7 +36,7 @@ def query4():
     return jsonify(result)
 
 
-@app.route("/query5", methods=["POST"])
+@app.route("/query5")
 def query5():
     result = query.query5()
     return jsonify(result)

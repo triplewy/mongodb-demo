@@ -1,6 +1,6 @@
 import csv
 from time import sleep
-from pymongo import MongoClient, TEXT
+from pymongo import MongoClient, TEXT, GEOSPHERE
 from datetime import datetime
 
 
@@ -13,6 +13,9 @@ def loadAirbnb():
             row['number_of_reviews'] = int(row['number_of_reviews'])
             row['latitude'] = float(row['latitude'])
             row['longitude'] = float(row['longitude'])
+            row['location'] = {'type': 'Point', 'coordinates': [row['longitude'], row['latitude']]}
+            del row['latitude']
+            del row['longitude']
             arr.append(row)
 
     inserted_ids = db.airbnb.insert_many(arr).inserted_ids
@@ -39,8 +42,10 @@ def loadTaxi():
 if __name__ == "__main__":
     db = MongoClient().test
     numAB = loadAirbnb()
-    numTaxi = loadTaxi()
-    db.airbnb.create_index([('name', TEXT), ('neighbourhood', TEXT)], default_language='english')
-
     print("{} Airbnb docs inserted".format(numAB))
+    numTaxi = loadTaxi()
     print("{} taxi docs inserted".format(numTaxi))
+    db.airbnb.create_index([('name', TEXT), ('neighbourhood', TEXT)], default_language='english')
+    print("Text index created for airbnb")
+    db.airbnb.create_index([('location', GEOSPHERE)])
+    print("Geosphere index created for airbnb")
