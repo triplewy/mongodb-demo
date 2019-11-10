@@ -39,6 +39,7 @@ def loadTaxi():
     return len(inserted_ids)
 
 
+# TODO: Create index before insert
 if __name__ == "__main__":
     db = MongoClient().test
     numAB = loadAirbnb()
