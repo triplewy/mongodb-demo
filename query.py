@@ -1,9 +1,30 @@
+"""
+(This is a file-level docstring.)
+This file contains all required queries to MongoDb.
+"""
 from pymongo import MongoClient
 
 db = MongoClient().test
 
 
 def query1(minFare, maxFare):
+    """ Finds taxi rides with fare amount greater than or equal to minFare and less than or equal to maxFare.  
+
+    Args:
+        minFare: An int represeting the minimum fare
+        maxFare: An int represeting the maximum fare
+
+    Projection:
+        pickup_longitude
+        pickup_latitude
+        fare_amount
+
+    Returns:
+        An array of documents.
+
+    Example:
+
+    """
     docs = db.taxi.find(
         {
             'fare_amount': {
@@ -24,6 +45,24 @@ def query1(minFare, maxFare):
 
 
 def query2(textSearch, minReviews):
+    """ Finds airbnbs with that match textSearch and have number of reviews greater than or equal to minReviews.  
+
+    Args:
+        textSearch: A str representing an arbitrary text search
+        minReviews: An int represeting the minimum amount of reviews
+
+    Projection:
+        name
+        number_of_reviews
+        neighbourhood
+        price
+
+    Returns:
+        An array of documents.
+
+    Example:
+
+    """
     docs = db.airbnb.find(
         {
             '$text': {
@@ -47,6 +86,14 @@ def query2(textSearch, minReviews):
 
 
 def query3():
+    """ Groups airbnbs by neighbourhood_group and finds average price of each neighborhood_group sorted in descending order.  
+
+    Returns:
+        An array of documents.
+
+    Example:
+
+    """
     docs = db.airbnb.aggregate([
         {
             '$group': {
@@ -66,6 +113,18 @@ def query3():
 
 
 def query4():
+    """ Groups taxis by pickup hour. 
+        Find average fare for each hour.
+        Find average manhattan distance travelled for each hour.
+        Count total number of rides per pickup hour.
+        Sort by average fare in descending order.
+
+    Returns:
+        An array of documents.
+
+    Example:
+
+    """
     docs = db.taxi.aggregate([
         {
             '$group': {
@@ -74,8 +133,10 @@ def query4():
                 'avgDistance': {
                     '$avg': {
                         '$add': [
-                            {'$abs': {'$subtract': ['$pickup_latitude', '$dropoff_latitude']}},
-                            {'$abs': {'$subtract': ['$pickup_longitude', '$dropoff_longitude']}}
+                            {'$abs': {'$subtract': [
+                                '$pickup_latitude', '$dropoff_latitude']}},
+                            {'$abs': {'$subtract': [
+                                '$pickup_longitude', '$dropoff_longitude']}}
                         ]
                     }
                 },
@@ -91,6 +152,23 @@ def query4():
 
 
 def query5():
+    """ Finds airbnbs within 1000 meters from location (longitude, latitude) using geoNear. 
+
+    Projection:
+        dist
+        location
+        name
+        neighbourhood
+        neighbourhood_group
+        price
+        room_type
+
+    Returns:
+        An array of documents.
+
+    Example:
+
+    """
     docs = db.airbnb.aggregate([
         {
             '$geoNear': {

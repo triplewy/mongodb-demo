@@ -1,3 +1,7 @@
+"""
+(This is a file-level docstring.)
+This file contains code for Flask server that handles API requests
+"""
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import query
