@@ -176,11 +176,20 @@ def query3():
 
 
 def query4():
-    """ Groups taxis by pickup hour. 
+    """ Aggregate taxis by pickup hour. 
         Find average fare for each hour.
         Find average manhattan distance travelled for each hour.
         Count total number of rides per pickup hour.
         Sort by average fare in descending order.
+
+    Projection:
+        _id = hour of pickup_datetime
+        avgFare
+        avgDistance (calculated using Manhattan Distance {abs(y2 - y1) + abs(x2 - x1)})
+        count (Number of rides)
+
+    Sort:
+        avgFare - descending
 
     Returns:
         An array of documents.
