@@ -35,6 +35,7 @@ def loadAirbnb(file):
     Args:
         file: location of the airbnb csv file.
     """
+    arr = []
     with open(file, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -50,15 +51,16 @@ def loadAirbnb(file):
             row['calculated_host_listings_count'] = int(
                 row['calculated_host_listings_count'])
             row['availability_365'] = int(row['availability_365'])
+            arr.append(row)
 
-        inserted_ids = db.airbnb.insert_many(reader).inserted_ids
-        db.airbnb.create_index(
-            [('name', TEXT), ('neighbourhood', TEXT)], default_language='english')
-        db.airbnb.create_index([('location', GEOSPHERE)])
+    inserted_ids = db.airbnb.insert_many(arr).inserted_ids
+    db.airbnb.create_index(
+        [('name', TEXT), ('neighbourhood', TEXT)], default_language='english')
+    db.airbnb.create_index([('location', GEOSPHERE)])
 
-        print("{} Airbnb docs inserted".format(len(inserted_ids)))
-        print("Text index created for airbnb")
-        print("Geosphere index created for airbnb")
+    print("{} Airbnb docs inserted".format(len(inserted_ids)))
+    print("Text index created for airbnb")
+    print("Geosphere index created for airbnb")
 
 
 def loadTaxi(file):
@@ -77,6 +79,7 @@ def loadTaxi(file):
     Args:
         file: location of the taxi csv file.
     """
+    arr = []
     with open(file, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -88,9 +91,10 @@ def loadTaxi(file):
             row['dropoff_longitude'] = float(row['dropoff_longitude'])
             row['dropoff_latitude'] = float(row['dropoff_latitude'])
             row['passenger_count'] = int(row['passenger_count'])
+            arr.append(row)
 
-        inserted_ids = db.taxi.insert_many(reader).inserted_ids
-        print("{} taxi docs inserted".format(len(inserted_ids)))
+    inserted_ids = db.taxi.insert_many(arr).inserted_ids
+    print("{} taxi docs inserted".format(len(inserted_ids)))
 
 
 if __name__ == "__main__":
