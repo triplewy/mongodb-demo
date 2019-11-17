@@ -28,7 +28,7 @@ def loadAirbnb(file):
             minimum_nights - int
             number_of_reviews - int
             last_review - string
-            reviews_per_month - float
+            reviews_per_month - string
             calculated_host_listings_count - int
             availability_365 - int
 
@@ -47,7 +47,6 @@ def loadAirbnb(file):
             row['price'] = int(row['price'])
             row['minimum_nights'] = int(row['minimum_nights'])
             row['number_of_reviews'] = int(row['number_of_reviews'])
-            row['reviews_per_month'] = float(row['reviews_per_month'])
             row['calculated_host_listings_count'] = int(
                 row['calculated_host_listings_count'])
             row['availability_365'] = int(row['availability_365'])
