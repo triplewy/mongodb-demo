@@ -42,7 +42,9 @@ def query4():
 
 @app.route("/query5")
 def query5():
-    result = query.query5()
+    latitude = float(request.args.get('latitude'))
+    longitude = float(request.args.get('longitude'))
+    result = query.query5(latitude, longitude)
     return jsonify(result)
 
 

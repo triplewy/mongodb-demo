@@ -195,7 +195,21 @@ def query4():
         An array of documents.
 
     Example:
-
+        /query4 -> [
+            {
+                "_id": 5, 
+                "avgDistance": 0.07160818471929617, 
+                "avgFare": 15.338208661417323, 
+                "count": 508
+            }, 
+            {
+                "_id": 4, 
+                "avgDistance": 0.1281508752115708, 
+                "avgFare": 13.740622950819674, 
+                "count": 610
+            }, 
+            ...
+        ]
     """
     docs = db.taxi.aggregate([
         {
@@ -223,12 +237,15 @@ def query4():
     return result
 
 
-def query5():
+def query5(latitude, longitude):
     """ Finds airbnbs within 1000 meters from location (longitude, latitude) using geoNear. 
+
+    Args:
+        latitude: A float representing latitude coordinate
+        longitude: A float represeting longitude coordinate
 
     Projection:
         dist
-        location
         name
         neighbourhood
         neighbourhood_group
@@ -239,15 +256,36 @@ def query5():
         An array of documents.
 
     Example:
-
+        /query5?latitude=40.7829&longitude=-73.9654 -> [
+            {
+                "dist": {
+                "calculated": 456.6389412208621
+                }, 
+                "name": "Sunny studio on UWS, steps to park", 
+                "neighbourhood": "Upper West Side", 
+                "neighbourhood_group": "Manhattan", 
+                "price": 90, 
+                "room_type": "Entire home/apt"
+            }, 
+            {
+                "dist": {
+                "calculated": 462.9532776699549
+                }, 
+                "name": "UWS Brownstone Near Central Park", 
+                "neighbourhood": "Upper West Side", 
+                "neighbourhood_group": "Manhattan", 
+                "price": 212, 
+                "room_type": "Entire home/apt"
+            },
+            ...
+        ]
     """
     docs = db.airbnb.aggregate([
         {
             '$geoNear': {
-                'near': {'type': 'Point', 'coordinates': [-73.9654, 40.7829]},
+                'near': {'type': 'Point', 'coordinates': [longitude, latitude]},
                 'distanceField': 'dist.calculated',
                 'maxDistance': 1000,
-                'includeLocs': 'dist.location',
                 'spherical': False
             }
         },
@@ -255,13 +293,15 @@ def query5():
             '$project': {
                 '_id': 0,
                 'dist': 1,
-                'location': 1,
                 'name': 1,
                 'neighbourhood': 1,
                 'neighbourhood_group': 1,
                 'price': 1,
                 'room_type': 1
             }
+        }, 
+        {
+            '$sort': {'dist': 1}
         }
     ])
     result = [doc for doc in docs]
