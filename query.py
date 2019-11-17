@@ -19,11 +19,28 @@ def query1(minFare, maxFare):
         pickup_latitude
         fare_amount
 
+    Sort (Order matters):
+        fare_amount - ascending
+        pickup_latitude - descending
+        pickup_longitude - descending
+
     Returns:
         An array of documents.
 
     Example:
-
+        /query1?minFare=11&maxFare=11 -> [
+            {
+                "fare_amount": 11.0, 
+                "pickup_latitude": 40.823625, 
+                "pickup_longitude": -73.952692
+            }, 
+            {
+                "fare_amount": 11.0, 
+                "pickup_latitude": 40.818315, 
+                "pickup_longitude": -73.960935
+            },
+            ...
+        ]
     """
     docs = db.taxi.find(
         {
@@ -38,6 +55,12 @@ def query1(minFare, maxFare):
             'pickup_latitude': 1,
             'fare_amount': 1
         }
+    ).sort(
+        [
+            ('fare_amount', 1),
+            ('pickup_latitude', -1),
+            ('pickup_longitude', -1),
+        ]
     )
 
     result = [doc for doc in docs]
@@ -57,11 +80,29 @@ def query2(textSearch, minReviews):
         neighbourhood
         price
 
+    Sort:
+        price - ascending
+        number_of_reviews - descending
+
     Returns:
         An array of documents.
 
     Example:
-
+        /query2?search=coffee&minReviews=10 -> [
+            {
+                "name": "Coffee,Tea&Milk Astor Place Lodging", 
+                "neighbourhood": "East Village", 
+                "number_of_reviews": 125, 
+                "price": 30
+            }, 
+            {
+                "name": "Cozy Room For Two/ Steps to Train/Coffee included!", 
+                "neighbourhood": "Harlem", 
+                "number_of_reviews": 26, 
+                "price": 54
+            },
+            ...
+        ]
     """
     docs = db.airbnb.find(
         {
@@ -79,6 +120,11 @@ def query2(textSearch, minReviews):
             'neighbourhood': 1,
             'price': 1
         }
+    ).sort(
+        [
+            ('price', 1),
+            ('number_of_reviews', -1)
+        ]
     )
 
     result = [doc for doc in docs]
@@ -88,11 +134,28 @@ def query2(textSearch, minReviews):
 def query3():
     """ Groups airbnbs by neighbourhood_group and finds average price of each neighborhood_group sorted in descending order.  
 
+    Projection:
+        _id = neighbourhood_group
+        avgPrice
+
+    Sort:
+        avgPrice - descending
+
     Returns:
         An array of documents.
 
     Example:
-
+        /query3 -> [
+            {
+                "_id": "Manhattan", 
+                "avgPrice": 196.8758136743456
+            }, 
+            {
+                "_id": "Brooklyn", 
+                "avgPrice": 124.38320732192598
+            },
+            ...
+        ]
     """
     docs = db.airbnb.aggregate([
         {
