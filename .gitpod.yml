@@ -5,3 +5,4 @@ ports:
 tasks:
   - command: mongod
   - command: pip3 install -r requirements.txt && python3 etl.py && python3 server.py
+workspaceLocation: "./stencil"
