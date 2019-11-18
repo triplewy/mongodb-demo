@@ -1,0 +1,7 @@
+image: gitpod/workspace-mongodb
+ports:
+  - port: 5000
+  - port: 27017
+tasks:
+  - command: mongod
+  - command: pip3 install -r requirements.txt && python3 etl.py && python3 server.py

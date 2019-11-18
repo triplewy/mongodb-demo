@@ -1,4 +1,0 @@
-pymongo
-Flask
-Flask-Cors
-gunicorn
